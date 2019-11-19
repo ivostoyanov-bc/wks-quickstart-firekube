@@ -161,12 +161,15 @@ git add config.yaml footloose.yaml machines.yaml flux.yaml wks-controller.yaml
 
 git diff-index --quiet HEAD || git commit -m "Initial cluster configuration"
 git push "${git_remote}" HEAD
-
+ 
 log "Installing Kubernetes cluster"
 apply_args=(
   "--git-url=$(git_http_url "$(git_remote_fetchurl "${git_remote}")")"
   "--git-branch=$(git_current_branch)"
 )
+
+log "apply_args "$apply_args
+
 [ "${git_deploy_key}" ] && apply_args+=("${git_deploy_key}")
 wksctl apply "${apply_args[@]}"
 wksctl kubeconfig
